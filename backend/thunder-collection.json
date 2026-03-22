@@ -1,0 +1,242 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "SkillTrack API",
+  "collectionId": "skilltrack-collection-001",
+  "dateExported": "2025-01-01",
+  "version": "1.2",
+  "folders": [
+    { "id": "f-auth", "name": "🔐 Auth", "containerId": "" },
+    { "id": "f-obj",  "name": "🎯 Objectifs", "containerId": "" },
+    { "id": "f-hab",  "name": "✅ Habitudes", "containerId": "" },
+    { "id": "f-ses",  "name": "⏱ Sessions", "containerId": "" },
+    { "id": "f-sta",  "name": "📊 Stats", "containerId": "" }
+  ],
+  "requests": [
+    {
+      "id": "r-01", "colId": "skilltrack-collection-001", "containerId": "f-auth",
+      "name": "Register", "url": "{{baseUrl}}/auth/register", "method": "POST",
+      "sortNum": 1,
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"Alex Martin\",\n  \"email\": \"alex@skilltrack.dev\",\n  \"password\": \"password123\"\n}"
+      }
+    },
+    {
+      "id": "r-02", "colId": "skilltrack-collection-001", "containerId": "f-auth",
+      "name": "Login", "url": "{{baseUrl}}/auth/login", "method": "POST",
+      "sortNum": 2,
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"email\": \"alex@skilltrack.dev\",\n  \"password\": \"password123\"\n}"
+      },
+      "tests": [
+        {
+          "type": "setEnvVar",
+          "custom": "tc.setVar(\"accessToken\", response.data.accessToken); tc.setVar(\"refreshToken\", response.data.refreshToken);"
+        }
+      ]
+    },
+    {
+      "id": "r-03", "colId": "skilltrack-collection-001", "containerId": "f-auth",
+      "name": "Get Me", "url": "{{baseUrl}}/auth/me", "method": "GET",
+      "sortNum": 3,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-04", "colId": "skilltrack-collection-001", "containerId": "f-auth",
+      "name": "Refresh Token", "url": "{{baseUrl}}/auth/refresh", "method": "POST",
+      "sortNum": 4,
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+      }
+    },
+    {
+      "id": "r-05", "colId": "skilltrack-collection-001", "containerId": "f-auth",
+      "name": "Logout", "url": "{{baseUrl}}/auth/logout", "method": "POST",
+      "sortNum": 5,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-10", "colId": "skilltrack-collection-001", "containerId": "f-obj",
+      "name": "Lister tous les objectifs", "url": "{{baseUrl}}/objectives", "method": "GET",
+      "sortNum": 10,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-11", "colId": "skilltrack-collection-001", "containerId": "f-obj",
+      "name": "Lister objectifs actifs", "url": "{{baseUrl}}/objectives?status=active", "method": "GET",
+      "sortNum": 11,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-12", "colId": "skilltrack-collection-001", "containerId": "f-obj",
+      "name": "Créer un objectif", "url": "{{baseUrl}}/objectives", "method": "POST",
+      "sortNum": 12,
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{accessToken}}" },
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"title\": \"Apprendre l'anglais\",\n  \"emoji\": \"🇬🇧\",\n  \"category\": \"learning\",\n  \"targetMin\": 15,\n  \"deadline\": null\n}"
+      },
+      "tests": [
+        {
+          "type": "setEnvVar",
+          "custom": "tc.setVar(\"objectiveId\", response.data.objective.id);"
+        }
+      ]
+    },
+    {
+      "id": "r-13", "colId": "skilltrack-collection-001", "containerId": "f-obj",
+      "name": "Détail objectif", "url": "{{baseUrl}}/objectives/{{objectiveId}}", "method": "GET",
+      "sortNum": 13,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-14", "colId": "skilltrack-collection-001", "containerId": "f-obj",
+      "name": "Modifier un objectif", "url": "{{baseUrl}}/objectives/{{objectiveId}}", "method": "PATCH",
+      "sortNum": 14,
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{accessToken}}" },
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"title\": \"Maîtriser l'anglais B2\",\n  \"targetMin\": 30\n}"
+      }
+    },
+    {
+      "id": "r-15", "colId": "skilltrack-collection-001", "containerId": "f-obj",
+      "name": "Changer statut (pause)", "url": "{{baseUrl}}/objectives/{{objectiveId}}/status", "method": "PATCH",
+      "sortNum": 15,
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{accessToken}}" },
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": { "type": "json", "raw": "{\n  \"status\": \"paused\"\n}" }
+    },
+    {
+      "id": "r-16", "colId": "skilltrack-collection-001", "containerId": "f-obj",
+      "name": "Supprimer objectif", "url": "{{baseUrl}}/objectives/{{objectiveId}}", "method": "DELETE",
+      "sortNum": 16,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-20", "colId": "skilltrack-collection-001", "containerId": "f-hab",
+      "name": "Lister les habitudes", "url": "{{baseUrl}}/habits", "method": "GET",
+      "sortNum": 20,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-21", "colId": "skilltrack-collection-001", "containerId": "f-hab",
+      "name": "Créer une habitude", "url": "{{baseUrl}}/habits", "method": "POST",
+      "sortNum": 21,
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{accessToken}}" },
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"title\": \"Coder 1h\",\n  \"emoji\": \"⚛️\",\n  \"frequency\": \"daily\",\n  \"targetDays\": [1, 2, 3, 4, 5],\n  \"objectiveId\": null\n}"
+      },
+      "tests": [
+        {
+          "type": "setEnvVar",
+          "custom": "tc.setVar(\"habitId\", response.data.habit.id);"
+        }
+      ]
+    },
+    {
+      "id": "r-22", "colId": "skilltrack-collection-001", "containerId": "f-hab",
+      "name": "Détail habitude + heatmap", "url": "{{baseUrl}}/habits/{{habitId}}", "method": "GET",
+      "sortNum": 22,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-23", "colId": "skilltrack-collection-001", "containerId": "f-hab",
+      "name": "Cocher aujourd'hui ✅", "url": "{{baseUrl}}/habits/{{habitId}}/complete", "method": "POST",
+      "sortNum": 23,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-24", "colId": "skilltrack-collection-001", "containerId": "f-hab",
+      "name": "Décocher aujourd'hui", "url": "{{baseUrl}}/habits/{{habitId}}/complete", "method": "DELETE",
+      "sortNum": 24,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-30", "colId": "skilltrack-collection-001", "containerId": "f-ses",
+      "name": "Lister les sessions (paginé)", "url": "{{baseUrl}}/sessions?page=1&limit=10", "method": "GET",
+      "sortNum": 30,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-31", "colId": "skilltrack-collection-001", "containerId": "f-ses",
+      "name": "Filtrer par objectif", "url": "{{baseUrl}}/sessions?objectiveId={{objectiveId}}", "method": "GET",
+      "sortNum": 31,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-32", "colId": "skilltrack-collection-001", "containerId": "f-ses",
+      "name": "Créer une session", "url": "{{baseUrl}}/sessions", "method": "POST",
+      "sortNum": 32,
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{accessToken}}" },
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"objectiveId\": \"{{objectiveId}}\",\n  \"durationMin\": 45,\n  \"note\": \"Super session, bien avancé !\",\n  \"startedAt\": \"2025-01-15T09:00:00.000Z\",\n  \"endedAt\": \"2025-01-15T09:45:00.000Z\"\n}"
+      },
+      "tests": [
+        {
+          "type": "setEnvVar",
+          "custom": "tc.setVar(\"sessionId\", response.data.session.id);"
+        }
+      ]
+    },
+    {
+      "id": "r-33", "colId": "skilltrack-collection-001", "containerId": "f-ses",
+      "name": "Supprimer une session", "url": "{{baseUrl}}/sessions/{{sessionId}}", "method": "DELETE",
+      "sortNum": 33,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-40", "colId": "skilltrack-collection-001", "containerId": "f-sta",
+      "name": "Dashboard stats", "url": "{{baseUrl}}/stats/dashboard", "method": "GET",
+      "sortNum": 40,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-41", "colId": "skilltrack-collection-001", "containerId": "f-sta",
+      "name": "Heatmap 91 jours", "url": "{{baseUrl}}/stats/heatmap", "method": "GET",
+      "sortNum": 41,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    },
+    {
+      "id": "r-42", "colId": "skilltrack-collection-001", "containerId": "f-sta",
+      "name": "Stats profil + badges", "url": "{{baseUrl}}/stats/profile", "method": "GET",
+      "sortNum": 42,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{accessToken}}" }]
+    }
+  ],
+  "environments": [
+    {
+      "id": "env-local",
+      "name": "Local Dev",
+      "data": [
+        { "name": "baseUrl",      "value": "http://localhost:3000/api", "isSecret": false },
+        { "name": "accessToken",  "value": "",  "isSecret": true  },
+        { "name": "refreshToken", "value": "",  "isSecret": true  },
+        { "name": "objectiveId",  "value": "",  "isSecret": false },
+        { "name": "habitId",      "value": "",  "isSecret": false },
+        { "name": "sessionId",    "value": "",  "isSecret": false }
+      ]
+    }
+  ]
+}
